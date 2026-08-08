@@ -30,7 +30,7 @@ jobs:
 
             - name: deploy to lambda
               run: |
-                    aws lambda update-function-code --function-name practice_lambda --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/lambda_demo:latest
+                    aws lambda update-function-code --function-name practice_lambda --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo:latest
 
             - name: wait for 10 seconds
               run: sleep 10
