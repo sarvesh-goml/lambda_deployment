@@ -1,0 +1,44 @@
+name : Ci pipeline 
+
+on:
+  push:
+    branches:
+        - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v4
+
+            - name: build docker image
+              run: docker build -t  lambda_demo .
+              
+            - name: set up aws
+              uses: "aws-actions/configure-aws-credentials@v4"
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ secrets.AWS_REGION }}
+
+            - name: push docker image to ECR
+              run: |
+                  aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+                  docker tag lambda_demo:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/lambda_demo:latest
+                  docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/lambda_demo:latest
+
+            - name: deploy to lambda
+              run: |
+                    aws lambda update-function-code --function-name practice_lambda --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/lambda_demo:latest
+
+            - name: wait for 10 seconds
+              run: sleep 10
+
+            - name: invoke-lambda-function
+              run: |
+                curl https://${{ secrets.AWS_LAMBDA_URL }}/docs
+                echo "Lambda function invoked successfully."
+
+
+            
