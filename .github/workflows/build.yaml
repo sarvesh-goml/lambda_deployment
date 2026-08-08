@@ -37,7 +37,7 @@ jobs:
 
             - name: invoke-lambda-function
               run: |
-                curl https://${{ secrets.AWS_LAMBDA_URL }}/docs
+                curl ${{ secrets.AWS_LAMBDA_URL }}/docs
                 echo "Lambda function invoked successfully."
 
 
