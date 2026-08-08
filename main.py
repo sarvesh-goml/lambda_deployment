@@ -141,16 +141,16 @@ def update_item(item_id: str, payload: ItemUpdate):
     return existing
 
 
-@app.delete("/items/{item_id}", status_code=204)
-def delete_item(item_id: str):
-    try:
-        response = table.get_item(Key={"id": item_id})
-        if not response.get("Item"):
-            raise HTTPException(status_code=404, detail="Item not found")
-        table.delete_item(Key={"id": item_id})
-    except ClientError as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    return None
+# @app.delete("/items/{item_id}", status_code=204)
+# def delete_item(item_id: str):
+#     try:
+#         response = table.get_item(Key={"id": item_id})
+#         if not response.get("Item"):
+#             raise HTTPException(status_code=404, detail="Item not found")
+#         table.delete_item(Key={"id": item_id})
+#     except ClientError as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+#     return None
 
 
 # ---------------------------------------------------------------------------
