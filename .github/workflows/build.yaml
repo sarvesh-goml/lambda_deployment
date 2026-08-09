@@ -64,7 +64,14 @@ jobs:
         run: |
           docker run -d -p 9000:8080 lambda_backend
           sleep 5
-          build --exit-code-from test test
+          response=$(curl -s -o /dev/null -w "%{http_code}" -XPOST "http://localhost:90002015-03-31/functions/function/invocations" -d '{"httpMethod":"GET","path":"/health","requestContext":{},"headers":{}}')
+          echo response code: $response
+          docker logs test-container
+          docker stop test-container
+          if [ "$response" -ne 200 ]; then
+            echo "smoke test failed"
+            exit 1
+          fi
 
   
   deploy: 
