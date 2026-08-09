@@ -75,7 +75,7 @@ jobs:
           aws ecr get-login-password --region ${{  secrets.AWS_REGION  }} | docker login --username AWS --password-stdin ${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com
           docker tag lambda_demo:latest ${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com/demo:latest
           docker push ${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com/demo:latest
-          echo "uri=${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com/demo:latest" >> $GITHUB_OUTPUT"
+          echo "uri=${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com/demo:latest" >> "$GITHUB_OUTPUT"
           
   deploy:
     needs: build_test
