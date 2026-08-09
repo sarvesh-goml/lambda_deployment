@@ -43,7 +43,7 @@
 
             
 
-name : Ci Pipeline
+name : CICD Pipeline
 
 on: 
   push:
