@@ -106,7 +106,7 @@ jobs:
 
       - name: deploy to lambda
         run: |
-          aws lambda update-function-code --function-name practice_lambda --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo:latest
+          aws lambda update-function-code --function-name practice_lambda --image-uri ${{ needs.build_and_test.outputs.image_uri }}
 
       - name: check live or not 
         run: | 
