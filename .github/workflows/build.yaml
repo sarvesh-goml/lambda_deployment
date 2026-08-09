@@ -62,9 +62,9 @@ jobs:
 
       - name: smoke test
         run: |
-          docker run -d -p 9000:8080 lambda_backend
+          docker run -d -p 9000:8080 --name test-container lambda_backend
           sleep 5
-          response=$(curl -s -o /dev/null -w "%{http_code}" -XPOST "http://localhost:90002015-03-31/functions/function/invocations" -d '{"httpMethod":"GET","path":"/health","requestContext":{},"headers":{}}')
+          response=$(curl -s -o /dev/null -w "%{http_code}" -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{"httpMethod":"GET","path":"/health","requestContext":{},"headers":{}}')
           echo response code: $response
           docker logs test-container
           docker stop test-container
