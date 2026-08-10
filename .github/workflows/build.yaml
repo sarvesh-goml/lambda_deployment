@@ -53,8 +53,6 @@ on :
 jobs:
   build_test:
     runs-on: ubuntu-latest
-    outputs: 
-      image_uri: ${{ steps.image.outputs.uri }}
 
     steps:
       - name: checkout code
@@ -76,7 +74,6 @@ jobs:
           aws ecr get-login-password --region ${{  secrets.AWS_REGION  }} | docker login --username AWS --password-stdin ${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com
           docker tag lambda_demo:latest ${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com/demo:latest
           docker push ${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com/demo:latest
-          echo "uri=${{  secrets.AWS_ACCOUNT_ID  }}.dkr.ecr.${{  secrets.AWS_REGION  }}.amazonaws.com/demo:latest" >> "$GITHUB_OUTPUT"
 
           
   deploy:
@@ -92,4 +89,4 @@ jobs:
       
       - name: deploy in lambda
         run: |
-          aws lambda update-function-code --function-name practice_lambda --image-uri 371192949443.dkr.ecr.us-east-1.amazonaws.com/demo:latest
+          aws lambda update-function-code --function-name practice_lambda --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo:latest
